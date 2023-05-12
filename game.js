@@ -201,7 +201,6 @@ class Heart extends AdventureScene {
                 }
                 else {
                     this.showMessage("I can't hit it!");
-                    shake.remove();
                     this.tweens.add({
                         targets: heart,
                         x: this.s + (this.h - 2 * this.s) * Math.random(),
@@ -224,7 +223,7 @@ class Heart extends AdventureScene {
                 if (this.hasItem("Sword")) {
                     if (consume === false) {
                         consume = true;
-                        this.cameras.main.shake(10000, 0.01);
+                        // this.cameras.main.shake(10000, 0.01);
                         this.showMessage
                         this.cameras.main.fadeOut(10000, 255, 0, 0);
                         shake = this.tweens.add({
