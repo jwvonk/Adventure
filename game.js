@@ -2,8 +2,12 @@ class Dunes extends AdventureScene {
     constructor() {
         super('dunes', "The Dunes");
     }
-
+    preload() {
+        this.load.path = './assets/';
+        this.load.image('sanddunes', 'sanddunes.png');
+        }
     onEnter() {
+        this.add.image(this.w * .375, this.h * .4, 'sanddunes').setScale(1.64);
         let conch = this.add.text(this.w * 0.3, this.w * 0.3, "🐚")
             .setFontSize(this.s * 5)
             .setInteractive()
@@ -12,7 +16,7 @@ class Dunes extends AdventureScene {
                 this.showMessage("Whoah, it just liquefied in my hands!");
                 this.tweens.add({
                     targets: conch,
-                    y: `-=${2 * this.s}`,
+                    y: `+=${2 * this.s}`,
                     alpha: { from: 1, to: 0 },
                     duration: 500,
                     onComplete: () => conch.destroy()
@@ -28,7 +32,7 @@ class Dunes extends AdventureScene {
         });
 
         conch.on('pointerdown', () => {
-            let stream = this.add.text(this.w * 0.3, 0, "🌊\n🌊\n🌊\n🌊\n🌊\n🌊\n")
+            let stream = this.add.text(this.w * 0.3, this.h * .6, "🌊\n🌊\n🌊\n🌊\n🌊")
                 .setFontSize(this.s * 5)
                 .setAlpha(0)
                 .setInteractive()
@@ -49,8 +53,13 @@ class Pyramid extends AdventureScene {
     constructor() {
         super("pyramid", "The Oceanic Pyramid");
     }
+    preload() {
+        this.load.path = './assets/';
+        this.load.image('seawall', 'seawall.jpg');
+        }
     onEnter() {
         let submerged = false;
+        this.add.image(this.w * .375, this.h * .4, 'seawall').setScale(.58);
         let dolphin = this.add.text(this.w * 0.1, this.w * 0.3, "🐬")
             .setFontSize(this.s * 5)
             .setInteractive()
@@ -59,11 +68,11 @@ class Pyramid extends AdventureScene {
             })
             .on('pointerdown', () => {
                 this.showMessage("What on Earth—I can breathe in here!");
-                this.cameras.main.flash(1000, 50, 168, 145);
+                this.cameras.main.flash(1000, 17, 111, 133);
                 this.tweens.add({
                     targets: dolphin,
                     angle: 360,
-                    x: this.w + this.s,
+                    y: 0 - this.s,
                     duration: 1000,
                     onComplete: () => dolphin.destroy()
                 });
@@ -72,7 +81,7 @@ class Pyramid extends AdventureScene {
         this.bob(dolphin);
 
         dolphin.on('pointerdown', () => {
-            let trail = this.add.text(this.w * 0.2, this.w * 0.3, "🫧🫧🫧🫧🫧🫧🫧🫧")
+            let trail = this.add.text(this.w * 0.1, 0, "🫧\n🫧\n🫧\n🫧\n🫧")
                 .setFontSize(this.s * 5)
                 .setAlpha(0)
                 .setInteractive()
@@ -106,9 +115,15 @@ class Ship extends AdventureScene {
     constructor() {
         super("ship", "The Sunken Ship");
     }
+    preload() {
+        this.load.path = './assets/';
+        this.load.image('deck', 'deck.png');
+    }
     onEnter() {
-        let door = this.add.text(this.w * 0.5, this.w * 0.1, "🚪")
+        this.add.image(this.w * .375, this.h * .4, 'deck').setScale(1.64);
+        let door = this.add.text(this.w * 0.35, this.w * 0.28, "🚪")
             .setFontSize(this.s * 5)
+            .setAngle(-14)
             .setInteractive()
             .on('pointerover', () => {
                 if (this.hasItem("Sword")) {
@@ -130,7 +145,7 @@ class Ship extends AdventureScene {
 
         this.flicker(doorGlow);
 
-        let sword = this.add.text(this.w * 0.1, this.w * 0.3, "🗡️")
+        let sword = this.add.text(this.w * 0.1, this.w * 0.32, "🗡️")
             .setFontSize(this.s * 5)
             .setInteractive()
             .on('pointerover', () => {
@@ -164,11 +179,15 @@ class Heart extends AdventureScene {
     constructor() {
         super("heart", "The Heart");
     }
-    
+    preload() {
+        this.load.path = './assets/';
+        this.load.image('quarters', 'quarters.png');
+    }
     onEnter() {
         let shake;
+        this.add.image(this.w * .375, this.h * .3, 'quarters').setScale(1.64);
         let consume = false;
-        let heart = this.add.text(this.w * 0.4, this.h * 0.5, "💚")
+        let heart = this.add.text(this.w * 0.3, this.h * 0.3, "💚")
             .setFontSize(this.s * 10)
             .setOrigin(.5, .5)
             .setInteractive()
@@ -203,10 +222,9 @@ class Heart extends AdventureScene {
             })
             .on('pointerdown', () => {
                 if (this.hasItem("Sword")) {
-                    debugger;
                     if (consume === false) {
                         consume = true;
-                        this.cameras.main.shake(10000, 0.02);
+                        this.cameras.main.shake(10000, 0.01);
                         this.showMessage
                         this.cameras.main.fadeOut(10000, 255, 0, 0);
                         shake = this.tweens.add({
@@ -245,10 +263,10 @@ class Heart extends AdventureScene {
                 .setAlpha(0)
                 .setInteractive()
                 .on('pointerdown', () => {
+                    this.loseItem("Sword");
                     this.input.setDefaultCursor('none');
                     this.swordCursor.setAlpha(1);
                     sword.destroy();
-                    this.loseItem("Sword");
                 });
             this.reveal(sword);
             let swordGlow = sword.preFX.addGlow('0xfff8c4', 20);
@@ -285,6 +303,7 @@ class Intro extends Phaser.Scene {
     create() {
         // REMOVE FOR FINAL BUILD
         this.scene.start('pyramid');
+
         this.add.text(50, 50, "The Desert Ocean").setFontSize(50);
         this.add.text(50, 100, "Click anywhere to begin.").setFontSize(20);
         this.input.on('pointerdown', () => {
