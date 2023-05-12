@@ -159,4 +159,23 @@ class AdventureScene extends Phaser.Scene {
         let delay = Math.floor(Math.random() * 900) + 100;
         this.time.delayedCall(delay, () => { this.flicker(obj) });
     }
+
+    reveal(obj) {
+        this.tweens.add({
+            targets: obj,
+            alpha: 1,
+            duration: 500
+        });
+    }
+
+    bob(obj) {
+        this.tweens.add({
+            targets: obj,
+            y: '+=' + this.s,
+            yoyo: true,
+            duration: 500,
+            repeat: -1,
+            ease: 'Sine.inOut'
+        });
+    }
 }

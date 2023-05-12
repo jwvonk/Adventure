@@ -54,11 +54,7 @@ class Dunes extends AdventureScene {
                     // });
                     this.gotoScene('pyramid');
                 });
-            this.tweens.add({
-                targets: stream,
-                alpha: 1,
-                duration: 500
-            });
+            this.reveal(stream);
 
         })
         // let door = this.add.text(this.w * 0.1, this.w * 0.15, "🚪 locked door")
@@ -120,14 +116,7 @@ class Pyramid extends AdventureScene {
                 });
                 submerged = true;
             });
-        this.tweens.add({
-            targets: dolphin,
-            y: '+=' + this.s,
-            yoyo: true,
-            duration: 500,
-            repeat: -1,
-            ease: 'Sine.inOut'
-        });
+        this.bob(dolphin);
 
         dolphin.on('pointerdown', () => {
             let trail = this.add.text(this.w * 0.5, this.w * 0.1, "🫧 Trail")
@@ -148,19 +137,8 @@ class Pyramid extends AdventureScene {
                     // });
                     this.gotoScene('ship');
                 });
-            this.tweens.add({
-                targets: trail,
-                alpha: 1,
-                duration: 500
-            })
-            this.tweens.add({
-                targets: trail,
-                y: '+=' + this.s,
-                yoyo: true,
-                duration: 500,
-                repeat: -1,
-                ease: 'Sine.inOut'
-            });
+            this.reveal(trail);
+            this.bob(trail)
         });
 
         let scarab = this.add.text(this.w * 0.2, this.w * 0.4, "🪲")
@@ -216,18 +194,6 @@ class Ship extends AdventureScene {
             });
 
         let doorGlow = door.preFX.addGlow('0x00ff8c', 20);
-
-        function flicker(scene) {
-            scene.tweens.add({
-                targets: doorGlow,
-                outerStrength: 0,
-                duration: 50,
-                yoyo: true,
-            });
-
-            let delay = Math.floor(Math.random() * 900) + 100;
-            setTimeout(flicker, delay, scene);
-        }
 
         this.flicker(doorGlow);
 
@@ -396,7 +362,7 @@ class Intro extends Phaser.Scene {
     }
     create() {
         // REMOVE FOR FINAL BUILD
-        this.scene.start('ship');
+        // this.scene.start('ship');
         this.add.text(50, 50, "The Desert Ocean").setFontSize(50);
         this.add.text(50, 100, "Click anywhere to begin.").setFontSize(20);
         this.input.on('pointerdown', () => {
