@@ -265,8 +265,10 @@ class Ship extends AdventureScene {
             //     yoyo: true,
             //     repeat: -1
             // });
-    };
-};
+    }
+}
+
+
 
 class Intro extends Phaser.Scene {
     constructor() {
