@@ -147,4 +147,16 @@ class AdventureScene extends Phaser.Scene {
     onEnter() {
         console.warn('This AdventureScene did not implement onEnter():', this.constructor.name);
     }
+
+    flicker(obj) {
+        // debugger;
+        this.tweens.add({
+            targets: obj,
+            outerStrength: 0,
+            duration: 50,
+            yoyo: true,
+        });
+        let delay = Math.floor(Math.random() * 900) + 100;
+        this.time.delayedCall(delay, () => { this.flicker(obj) });
+    }
 }

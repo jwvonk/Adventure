@@ -229,7 +229,7 @@ class Ship extends AdventureScene {
             setTimeout(flicker, delay, scene);
         }
 
-        flicker(this);
+        this.flicker(doorGlow);
 
         let sword = this.add.text(this.w * 0.1, this.w * 0.3, "🗡️")
             .setFontSize(this.s * 5)
@@ -286,49 +286,64 @@ class Heart extends AdventureScene {
         //         });
         //     })
         //     .on('pointerdown', () => this.gotoScene('outro'));
+        let shake;
         let heart = this.add.text(this.w * 0.5, this.w * 0.1, "💚")
             .setFontSize(this.s * 10)
             .setOrigin(.5, .5)
             .setInteractive()
             .on('pointerover', () => {
                 if (this.hasItem("Sword")) {
-                    this.showMessage("Is it… dying?")
+                    this.showMessage("Is it… dying?");
                 }
                 else {
-                    this.showMessage("I can't hit it!")
+                    this.showMessage("I can't hit it!");
+                    shake.remove();
                     this.tweens.add({
                         targets: heart,
                         x: this.s + (this.h - 2 * this.s) * Math.random(),
                         y: this.s + (this.h - 2 * this.s) * Math.random(),
                         ease: 'Sine.inOut',
-                        duration: 500
-                    });
+                        duration: 500,
+                        onComplete: () => {
+                            shake = this.tweens.add({
+                                targets: heart,
+                                x: `+=${this.s}`,
+                                yoyo: true,
+                                duration: 50,
+                                repeat: -1,
+                            }) 
+                        }
+                    })
+                    
                 }
             })
             .on('pointerdown', () => {
                 if (this.hasItem("Sword")) {
                     this.showMessage("It's draining my life force!")
-                    this.loseItem("Sword");
+                    this.cameras.main.fadeOut(10000, 255, 0, 0);
+                    shake = this.tweens.add({
+                        targets: heart,
+                        x: `+=${this.s}`,
+                        yoyo: true,
+                        duration: 50,
+                        repeat: -1,
+                    })
+                    this.time.delayedCall(10000, () => {
+                        this.input.setDefaultCursor("default");
+                        this.cameras.main.fadeOut(0, 0, 0, 0);
+                        this.gotoScene("consumed");
+                    });
                 } else {
-                    this.input.setDefaultCursor('none');
-                    this.gotoScene("outro");
+                    this.input.setDefaultCursor("default");
+                    this.swordCursor.destroy();
+                    this.cameras.main.fadeOut(0, 0, 0, 0);
+                    this.gotoScene("destroyed");
                 }
             });
 
         let heartGlow = heart.preFX.addGlow('0x00ff8c', 100);
 
-        function flicker(scene) {
-            scene.tweens.add({
-                targets: heartGlow,
-                outerStrength: 0,
-                duration: 50,
-                yoyo: true,
-            });
-
-            let delay = Math.floor(Math.random() * 900) + 100;
-            setTimeout(flicker, delay, scene);
-        }
-        flicker(this);
+        this.flicker(heartGlow);
 
         this.swordCursor = this.add.text(this.w * 0.1, this.w * 0.3, "🗡️")
             .setFontSize(this.s * 5)
@@ -343,6 +358,7 @@ class Heart extends AdventureScene {
                     this.input.setDefaultCursor('none');
                     this.swordCursor.setAlpha(1);
                     sword.destroy();
+                    this.loseItem("Sword");
                 });
             let swordGlow = sword.preFX.addGlow('0xfff8c4', 20);
             this.tweens.add({
@@ -364,7 +380,6 @@ class Heart extends AdventureScene {
             yoyo: true,
             repeat: -1
         })
-
     }
 
     update() {
@@ -382,8 +397,7 @@ class Intro extends Phaser.Scene {
     create() {
         // REMOVE FOR FINAL BUILD
         this.scene.start('ship');
-
-        this.add.text(50, 50, "Adventure awaits!").setFontSize(50);
+        this.add.text(50, 50, "The Desert Ocean").setFontSize(50);
         this.add.text(50, 100, "Click anywhere to begin.").setFontSize(20);
         this.input.on('pointerdown', () => {
             this.cameras.main.fade(1000, 0, 0, 0);
@@ -392,13 +406,31 @@ class Intro extends Phaser.Scene {
     }
 }
 
-class Outro extends Phaser.Scene {
+class Consumed extends Phaser.Scene {
     constructor() {
-        super('outro');
+        super('consumed');
     }
     create() {
-        this.add.text(50, 50, "That's all!").setFontSize(50);
-        this.add.text(50, 100, "Click anywhere to restart.").setFontSize(20);
+        this.cameras.main.fadeIn(5000, 0, 0, 0);
+        this.add.text(50, 50,
+`You have been consumed by the pyramid.
+The Desert Ocean lives on.`
+            ).setFontSize(50);
+        this.add.text(50, 150, "Click anywhere to restart.").setFontSize(20);
+        this.input.on('pointerdown', () => this.scene.start('intro'));
+    }
+}
+
+class Destroyed extends Phaser.Scene {
+    constructor() {
+        super('destroyed');
+    }
+    create() {
+        this.cameras.main.fadeIn(5000, 0, 0, 0);
+        this.add.text(50, 50,
+`The heart has been destroyed.
+The Desert Ocean is no more.`).setFontSize(50);
+        this.add.text(50, 150, "Click anywhere to restart.").setFontSize(20);
         this.input.on('pointerdown', () => this.scene.start('intro'));
     }
 }
@@ -411,7 +443,7 @@ const game = new Phaser.Game({
         width: 1920,
         height: 1080
     },
-    scene: [Intro, Dunes, Pyramid, Ship, Heart, Outro],
+    scene: [Intro, Dunes, Pyramid, Ship, Heart, Consumed, Destroyed],
     title: "Adventure Game",
 });
 
