@@ -1,7 +1,7 @@
 class Dunes extends AdventureScene {
     constructor() {
         super('dunes', "The Dunes");
-    };
+    }
 
     onEnter() {
         let conch = this.add.text(this.w * 0.3, this.w * 0.3, "🐚 Shell")
@@ -80,8 +80,8 @@ class Dunes extends AdventureScene {
         //         }
         //     })
 
-    };
-};
+    }
+}
 
 class Pyramid extends AdventureScene {
     constructor() {
@@ -175,7 +175,7 @@ class Pyramid extends AdventureScene {
             duration: 50000,
             repeat: -1
         })
-    };
+    }
 }
 
 class Ship extends AdventureScene {
@@ -196,59 +196,77 @@ class Ship extends AdventureScene {
         //         });
         //     })
         //     .on('pointerdown', () => this.gotoScene('outro'));
-        let dolphin = this.add.text(this.w * 0.5, this.w * 0.1, "🐬 Dolphin")
+        let door = this.add.text(this.w * 0.5, this.w * 0.1, "🚪")
             .setFontSize(this.s * 5)
             .setInteractive()
             .on('pointerover', () => {
-                this.showMessage("It seems like it's in distress. Maybe it wants to show me something?")
+                if (this.hasItem("sword")) {
+                    this.showMessage("Maybe I can pry it open.");
+                } else {
+                    this.showMessage("Whatever's behind this door is calling to me…");
+                }
             })
             .on('pointerdown', () => {
-                this.showMessage("What on Earth—I can breathe in here!");
-                dolphin.setText("🐬")
-                this.tweens.add({
-                    targets: dolphin,
-                    angle: 360,
-                    x: 0 - this.s * 5,
-                    duration: 1000,
-                    onComplete: () => dolphin.destroy()
-                });
+                if (this.hasItem("sword")) {
+                    this.showMessage("Here goes nothing!");
+                    this.gotoScene("heart");
+                } else {
+                    this.showMessage("It's wedged shut.");
+                };
             });
-            this.tweens.add({
-                targets: dolphin,
-                y: '+=' + this.s,
+
+            let doorGlow = door.preFX.addGlow('0x00ff8c', 20);
+
+            function flicker(scene) {
+                scene.add.tween({
+                targets: doorGlow,
+                outerStrength: 0,
+                duration: 50,
                 yoyo: true,
-                duration: 500,
-                repeat: -1,
-                ease: 'Sine.inOut'
+                });
+
+                let delay = Math.floor(Math.random() * 900) + 100;
+                setTimeout(flicker, delay, scene);
+            }
+
+            flicker(this);
+
+            let sword = this.add.text(this.w * 0.1, this.w * 0.3, "🗡️")
+            .setFontSize(this.s * 5)
+            .setInteractive()
+            .on('pointerover', () => {
+                this.showMessage("That dolphHow has it stayed so pristine down here?in sure took off in a hurry!")
             })
-            dolphin.on('pointerdown', () => {
-                let trail = this.add.text(this.w * 0.5, this.w * 0.1, "🫧 Trail")
-                .setFontSize(this.s * 5)
-                .setAlpha(0)
-                .setInteractive()
-                .on('pointerover', () => {
-                    this.showMessage("That dolphin sure took off in a hurry!")
-                })
-                .on('pointerdown', () => {
-                    this.showMessage("Better get after it!");
-                    // this.tweens.add({
-                    //     targets: key,
-                    //     y: `-=${2 * this.s}`,
-                    //     alpha: { from: 1, to: 0 },
-                    //     duration: 500,
-                    //     onComplete: () => key.destroy()
-                    // });
-                    this.gotoScene('ship');
-                });
+            .on('pointerdown', () => {
+                this.showMessage("It's still sharp! Better be careful with this…");
                 this.tweens.add({
-                    targets: trail,
-                    y: '+=' + this.s,
-                    alpha: 1,
-                    duration: 500
+                    targets: sword,
+                    y: `-=${2 * this.s}`,
+                    alpha: { from: 1, to: 0 },
+                    duration: 500,
+                    onComplete: () => sword.destroy()
                 });
+                this.gotoScene('ship');
             });
+
+            let swordGlow = sword.preFX.addGlow('0xfff8c4', 20);
+    
+            this.add.tween({
+                targets: swordGlow,
+                outerStrength: 5,
+                duration: 1000,
+                yoyo: true,
+                repeat: -1
+            })
+            // this.tweens.add({
+            //     targets: sword,
+            //     tint: '0xb510ad',
+            //     duration: 5000,
+            //     yoyo: true,
+            //     repeat: -1
+            // });
     };
-}
+};
 
 class Intro extends Phaser.Scene {
     constructor() {
