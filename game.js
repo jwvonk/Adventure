@@ -5,7 +5,7 @@ class Dunes extends AdventureScene {
     preload() {
         this.load.path = './assets/';
         this.load.image('sanddunes', 'sanddunes.png');
-        }
+    }
     onEnter() {
         this.add.image(this.w * .375, this.h * .4, 'sanddunes').setScale(1.64);
         let conch = this.add.text(this.w * 0.3, this.w * 0.3, "🐚")
@@ -56,7 +56,7 @@ class Pyramid extends AdventureScene {
     preload() {
         this.load.path = './assets/';
         this.load.image('seawall', 'seawall.jpg');
-        }
+    }
     onEnter() {
         let submerged = false;
         this.add.image(this.w * .375, this.h * .4, 'seawall').setScale(.58);
@@ -215,7 +215,7 @@ class Heart extends AdventureScene {
                                 yoyo: true,
                                 duration: 50,
                                 repeat: -1,
-                            }) 
+                            })
                         }
                     })
                 }
@@ -278,7 +278,7 @@ class Heart extends AdventureScene {
                 repeat: -1
             })
         })
-        
+
         let swordCursorGlow = this.swordCursor.preFX.addGlow('0xfff8c4', 20);
 
         this.tweens.add({
@@ -328,7 +328,7 @@ class Destroyed extends Phaser.Scene {
     }
     create() {
         this.cameras.main.fadeIn(5000, 0, 0, 0);
-        this.add.text(50, 50,"The heart has been destroyed.\nThe Desert Ocean is no more.").setFontSize(50);
+        this.add.text(50, 50, "The heart has been destroyed.\nThe Desert Ocean is no more.").setFontSize(50);
         this.add.text(50, 150, "Click anywhere to restart.").setFontSize(20);
         this.input.on('pointerdown', () => this.scene.start('intro'));
     }
