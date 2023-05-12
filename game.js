@@ -301,9 +301,6 @@ class Intro extends Phaser.Scene {
         super('intro')
     }
     create() {
-        // REMOVE FOR FINAL BUILD
-        this.scene.start('pyramid');
-
         this.add.text(50, 50, "The Desert Ocean").setFontSize(50);
         this.add.text(50, 100, "Click anywhere to begin.").setFontSize(20);
         this.input.on('pointerdown', () => {
