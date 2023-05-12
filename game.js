@@ -1,7 +1,7 @@
 class Dunes extends AdventureScene {
     constructor() {
         super('dunes', "The Dunes");
-    }
+    };
 
     onEnter() {
         let conch = this.add.text(this.w * 0.3, this.w * 0.3, "🐚 Shell")
@@ -33,7 +33,7 @@ class Dunes extends AdventureScene {
             duration: 50,
             repeat: -1,
             repeatDelay: 2000
-            })
+            });
         
         conch.on('pointerdown', () => {
             let stream = this.add.text(this.w * 0.5, this.w * 0.1, "🌊🌊🌊 Stream")
@@ -80,12 +80,107 @@ class Dunes extends AdventureScene {
         //         }
         //     })
 
-    }
-}
+    };
+};
 
 class Pyramid extends AdventureScene {
     constructor() {
         super("pyramid", "The Oceanic Pyramid");
+    }
+    onEnter() {
+        let submerged = false;
+        // let finish = this.add.text(this.w * 0.6, this.w * 0.2, '(finish the game)')
+        //     .setInteractive()
+        //     .on('pointerover', () => {
+        //         this.showMessage('*giggles*');
+        //         this.tweens.add({
+        //             targets: finish,
+        //             x: this.s + (this.h - 2 * this.s) * Math.random(),
+        //             y: this.s + (this.h - 2 * this.s) * Math.random(),
+        //             ease: 'Sine.inOut',
+        //             duration: 500
+        //         });
+        //     })
+        //     .on('pointerdown', () => this.gotoScene('outro'));
+        let dolphin = this.add.text(this.w * 0.5, this.w * 0.1, "🐬 Dolphin")
+            .setFontSize(this.s * 5)
+            .setInteractive()
+            .on('pointerover', () => {
+                this.showMessage("It seems like it's in distress. Maybe it wants to show me something?")
+            })
+            .on('pointerdown', () => {
+                this.showMessage("What on Earth—I can breathe in here!");
+                dolphin.setText("🐬")
+                this.tweens.add({
+                    targets: dolphin,
+                    angle: 360,
+                    x: 0 - this.s * 5,
+                    duration: 1000,
+                    onComplete: () => dolphin.destroy()
+                });
+                submerged = true;
+            });
+            this.tweens.add({
+                targets: dolphin,
+                y: '+=' + this.s,
+                yoyo: true,
+                duration: 500,
+                repeat: -1,
+                ease: 'Sine.inOut'
+            });
+        
+        dolphin.on('pointerdown', () => {
+            let trail = this.add.text(this.w * 0.5, this.w * 0.1, "🫧 Trail")
+            .setFontSize(this.s * 5)
+            .setAlpha(0)
+            .setInteractive()
+            .on('pointerover', () => {
+                this.showMessage("That dolphin sure took off in a hurry!")
+            })
+            .on('pointerdown', () => {
+                this.showMessage("Better get after it!");
+                // this.tweens.add({
+                //     targets: key,
+                //     y: `-=${2 * this.s}`,
+                //     alpha: { from: 1, to: 0 },
+                //     duration: 500,
+                //     onComplete: () => key.destroy()
+                // });
+                this.gotoScene('demo2');
+            });
+            this.tweens.add({
+                targets: trail,
+                alpha: 1,
+                duration: 500
+            })
+            this.tweens.add({
+                targets: trail,
+                y: '+=' + this.s,
+                yoyo: true,
+                duration: 500,
+                repeat: -1,
+                ease: 'Sine.inOut'
+            });
+        });
+
+        let scarab = this.add.text(this.w * 0.2, this.w * 0.4, "🪲")
+        .setFontSize(this.s * 5)
+        .setInteractive()
+            .on('pointerover', () => {
+                this.showMessage(submerged ? "How come I can breathe down here but this thing couldn't?" : "Looks like it drowned");
+            })
+        this.tweens.add({
+            targets: scarab,
+            angle: 360,
+            duration: 50000,
+            repeat: -1
+        })
+    };
+}
+
+class Ship extends AdventureScene {
+    constructor() {
+        super("ship", "The Sunken Ship");
     }
     onEnter() {
         // let finish = this.add.text(this.w * 0.6, this.w * 0.2, '(finish the game)')
@@ -143,15 +238,16 @@ class Pyramid extends AdventureScene {
                     //     duration: 500,
                     //     onComplete: () => key.destroy()
                     // });
-                    this.gotoScene('demo2');
+                    this.gotoScene('ship');
                 });
                 this.tweens.add({
                     targets: trail,
+                    y: '+=' + this.s,
                     alpha: 1,
                     duration: 500
                 });
-            })
-    }
+            });
+    };
 }
 
 class Intro extends Phaser.Scene {
@@ -160,7 +256,7 @@ class Intro extends Phaser.Scene {
     }
     create() {
         // REMOVE FOR FINAL BUILD
-        this.scene.start('pyramid');
+        this.scene.start('ship');
 
         this.add.text(50,50, "Adventure awaits!").setFontSize(50);
         this.add.text(50,100, "Click anywhere to begin.").setFontSize(20);
@@ -190,7 +286,7 @@ const game = new Phaser.Game({
         width: 1920,
         height: 1080
     },
-    scene: [Intro, Dunes, Pyramid, Outro],
+    scene: [Intro, Dunes, Pyramid, Ship, Outro],
     title: "Adventure Game",
 });
 
