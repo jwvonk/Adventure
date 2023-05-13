@@ -17,7 +17,7 @@ Experience requirements:
 
 Asset sources:
 
-- All background images generated using [Craiyon](https://www.craiyon.com/)
+- All background images generated using [Craiyon](https://www.craiyon.com/) (Prompts: sand dunes, deep sandy sea floor, sunken pirate ship, interior lf pirate ship captain's quarters underwater)
 - The Oceanic Pyramid background image has altered tone-value levels, accomplished using [Krita](https://krita.org/en/)
 
 
