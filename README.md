@@ -1,15 +1,16 @@
 A simple adventure game by {who?} based on a simple adventure game engine by [Adam Smith](https://github.com/rndmcnlly).
 
 Code requirements:
-- **4+ scenes based on `AdventureScene`**: unsatisfied (name at least 4 of the classes).
-- **2+ scenes *not* based on `AdventureScene`**: unsatisfied (name the classes).
+- **4+ scenes based on `AdventureScene`**: Dunes, Pyramid, Ship, Heart
+- **2+ scenes *not* based on `AdventureScene`**: Intro, Consumed, Destroyed
 - **2+ methods or other enhancement added to the adventure game engine to simplify my scenes**:
-    - Enhancement 1: unsatisfied (name the method and explain the use of it).
-    - Enhancement 2: unsatisfied (name the method and explain the use of it).
+    - Enhancement 1: `flicker(obj)`: adds a random flickering effect to an instance of glow FX
+    - Enhancement 2: `bob(obj)`: adds a bobbing tween effect to an object
+    - Enhancement e: `reveal(obj)`: adds. tween to increases the opacity of an object
 
 Experience requirements:
-- **4+ locations in the game world**: unsatisfied (name at least 4 of the classes).
-- **2+ interactive objects in most scenes**: unsatisfied (describe two examples)
+- **4+ locations in the game world**: The Dunes, The Oceanic Pyramid, The Sunken Ship, The Heart
+- **2+ interactive objects in most scenes**: 
 - **Many objects have `pointerover` messages**: unsatisfied (describe two examples)
 - **Many objects have `pointerdown` effects**: unsatisfied (describe two examples)
 - **Some objects are themselves animated**: unsatisfied (describe two examples)
